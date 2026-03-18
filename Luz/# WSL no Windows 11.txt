@@ -1,0 +1,13 @@
+# WSL no Windows 11 
+
+# Documentação do passo a passo para instalação e habilitação e habilitação do WSL (Windows Subsystem for Linux)
+--------------------------------------------------------------------------------------------------------------------
+
+## Pre-flight check
+
+1. Verifique se a virtualização está habilitada no BIOS/UEFI:
+
+- Abri o gerenciador de tarefas e verificar a informação "Virtualização" na aba "Desempenho"
+
+2.
+
