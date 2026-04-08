@@ -1,6 +1,6 @@
 async function lagarta(){
     let milton = "()()()()()()()()()()()()()(0*0)"
-    let espaço = " "
+    let espaço = "  "
     let milton_pós_almoço =  "( )( )( )( )( )( )( )( )(  )( )( )( )()(0*0)"
 
     function slepp(ms){
@@ -10,11 +10,11 @@ async function lagarta(){
     for ( let i = 0; i < 100000; i ++){
         milton =  espaço + milton
         console.log(milton)
-        await slepp (200) 
+        await slepp (100) 
         console.clear();
         console.log(milton_pós_almoço)
         milton_pós_almoço =  espaço + milton_pós_almoço
-        await slepp (500)
+        await slepp (250)
         console.clear();
     
     }
