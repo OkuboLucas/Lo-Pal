@@ -1,0 +1,48 @@
+/* Estilos para centralizar o canvas e adicionar borda brilhante */
+
+body {
+    background-color: rgb(21, 21, 56);
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    opacity: 0.1;
+    color: aliceblue;
+    margin-top: 20px;
+}
+
+#jogo {
+    border: 3px solid #007093;
+    border-radius: 10px;
+    box-shadow:
+        0 0 20px rgba(0, 255, 0, 0.5),
+        0 0 40px rgba(0, 255, 247, 0.3),
+        0 0 60px rgba(0, 255, 247, 0.2),
+        inset 0 0 20px rgba(0, 255, 247, 0.1);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow:
+            0 0 20px rgba(0, 255, 247, 0.5),
+            0 0 40px rgba(0, 255, 247, 0.3),
+            0 0 60px rgba(0, 255, 247, 0.2),
+            inset 0 0 20px rgba(0, 255, 247, 0.1);
+    }
+    to {
+        box-shadow:
+            0 0 30px rgba(0, 255, 247, 0.7),
+            0 0 60px rgba(0, 255, 247, 0.5),
+            0 0 90px rgba(0, 255, 247, 0.3),
+            inset 0 0 30px rgba(0, 255, 200, 0.2);
+    }
+}
