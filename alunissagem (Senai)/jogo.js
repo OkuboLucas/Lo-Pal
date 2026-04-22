@@ -1,14 +1,23 @@
 //PROJETO ARTEMIS 3.0
 // LeCUBESS (@OkuboLucas)
 //08/04/2026
-//Versão 0.1.2
+//Versão 0.2 
 
 /** @type {HTMLCanvasElement} */
 
 let canvas = document.querySelector("#jogo");
 let contexto = canvas.getContext("2d");
+let estado = "menu"; //decreta aonde está o estado do jogo, se ele está em andamento = "jogo" / se ele está no menu de iniciar = "menu"
 let lancamento = (Math.round(Math.random()) == 0);// Lançamento aleatório (variável booleana)
 let estrelas = [];
+let conquistas = {
+    queremosVoltar: false,
+    BateuBonito: false,
+    "NeilArmstrong?": false,
+    PousoArriscado: false,
+    "Terra à vista": false,
+
+}
 for (let i = 0; i < 500; i++){
         estrelas[i] = {
         x: Math.random() * canvas.width,
@@ -23,7 +32,7 @@ for (let i = 0; i < 500; i++){
 
 let moduloLunar = {
     posicao: {
-        x: lancamento ? 100 : 700,
+        x: lancamento ? 100 : 1800,
         y: 100,
         
     },
@@ -36,7 +45,7 @@ let moduloLunar = {
         y: 0
     },
     motorligado: false,
-    combustivel: 99999,
+    combustivel: 100000000,
     rotacaoantihoraria: false,
     rotacaohorario: false,
 }
@@ -47,6 +56,22 @@ let moduloLunar = {
         }
     });
 
+function desenharMenu(){
+    desenharEstrela(); // ⭐ fundo animado
+    desenharModuloLunar();    
+    atracaoGravitacional();
+    contexto.fillStyle = "white";
+    contexto.font = "bold 90px Arial";
+    contexto.textAlign = "center";
+    contexto.fillText("ARTEMIS 3.0", canvas.width /2, canvas.height /2 - 60);
+
+    contexto.font = "30px Arial";
+    contexto.fillText("Aperte ENTER para iniciar", canvas.width /2, canvas.height /2);
+
+    contexto.font = "18px Arial";
+    contexto.fillText("Use A/D para girar | W para subir", canvas.width /2, canvas.height /2 + 45);
+    contexto.fillText("R para reiniciar o jogo", canvas.width/2, canvas.height/2 + 90)
+}
 function mostrarAltitude(){
     mostrarIndicador( `Altitude: ${(canvas.height - moduloLunar.posicao.y - 0.5 * moduloLunar.altura).toFixed(2)}`, 
     520,
@@ -64,7 +89,7 @@ function mostrarIndicador(mensagem, x , y){
      contexto.Font = "Bold Arial" , "90px";
     contexto.textAlign = "left";
     contexto.testBaseline = "middle";
-    contexto.fillStyle = "lightgray";
+    contexto.fillStyle = "#26ff00";
     
     contexto.fillText(
         mensagem,
@@ -75,7 +100,7 @@ function mostrarIndicador(mensagem, x , y){
 function mostrarVelocidadeHorizontal(){
     mostrarIndicador(`Velocidade Horizontal: ${(10 * moduloLunar.velocidade.x).toFixed(2)} m/s`,
     50,
-    30
+    30,
 
     );
 }
@@ -140,22 +165,57 @@ function desenharEstrela(){
  
 function desenharModuloLunar(){
     //Retângulo Fogute
-    contexto.save();
-    contexto.beginPath();
-    contexto.translate(moduloLunar.posicao.x, moduloLunar.posicao.y);
-    contexto.rotate(moduloLunar.angulo);
-    contexto.rect(moduloLunar.largura * -0.5, moduloLunar.altura * -0.4,
-                  moduloLunar.largura , moduloLunar.altura * 0.9);
-    contexto.fillStyle = moduloLunar.cor;
-    contexto.fill();
-    //Triângulo Foguete
+            
+        contexto.save();
         contexto.beginPath();
+        contexto.translate(moduloLunar.posicao.x, moduloLunar.posicao.y);
+        contexto.rotate(moduloLunar.angulo);
+       contexto.beginPath();
+        contexto.moveTo(-moduloLunar.largura * 0.5, -moduloLunar.altura * 0.4);
+        contexto.lineTo(moduloLunar.largura * 0.5, -moduloLunar.altura * 0.4);
+        contexto.lineTo(moduloLunar.largura * 0.4, moduloLunar.altura * 0.4);
+        contexto.lineTo(-moduloLunar.largura * 0.4, moduloLunar.altura * 0.4);
+        contexto.closePath();
+        contexto.fill();
+       let grad = contexto.createLinearGradient(0, -moduloLunar.altura, 0, moduloLunar.altura);
+        grad.addColorStop(0, "white");
+        grad.addColorStop(1, moduloLunar.cor);
+
+        contexto.fillStyle = grad;
+        contexto.fill();
+        contexto.strokeStyle ="black";
+        contexto.lineWidth = 2;
+        contexto.stroke();
+    //Asas
+    contexto.beginPath();
+    contexto.moveTo(moduloLunar.largura * 0.5, -7);
+    contexto.lineTo(moduloLunar.largura * 0.9, moduloLunar.altura * 0.2);
+    contexto.lineTo(moduloLunar.largura * 0.4, moduloLunar.altura * 0.3);
+    contexto.closePath();
+    contexto.fillStyle = "#666";
+    contexto.fill();
+    contexto.strokeStyle = "black";
+    contexto.stroke();
+     contexto.beginPath();
+    contexto.moveTo(moduloLunar.largura * -0.5, -7);
+    contexto.lineTo(moduloLunar.largura * -0.9, moduloLunar.altura * 0.2);
+    contexto.lineTo(moduloLunar.largura * -0.4, moduloLunar.altura * 0.3);
+    contexto.closePath();
+    contexto.fillStyle = "#666";
+    contexto.fill();
+    contexto.strokeStyle = "black";
+    contexto.stroke();
+    //Triângulo Foguete
+    contexto.beginPath();
     contexto.moveTo(moduloLunar.largura * 0.5, moduloLunar.altura * -0.4);
     contexto.lineTo(moduloLunar.largura * -0.5, moduloLunar.altura * -0.4)
     contexto.lineTo(0, moduloLunar.altura *-1.1);
     contexto.closePath();
     contexto.fillStyle = 'gray'
     contexto.fill();
+    contexto.strokeStyle ="black";
+    contexto.lineWidth = 2;
+    contexto.stroke();
      //Base Foguete
         contexto.beginPath();
          contexto.rect(moduloLunar.largura * -0.5, moduloLunar.altura * 0.38,
@@ -163,11 +223,22 @@ function desenharModuloLunar(){
         contexto.closePath();
         contexto.fillStyle = 'red'
         contexto.fill();
+        contexto.strokeStyle ="black";
+        contexto.lineWidth = 2;
+        contexto.stroke();
     //Janela da Nave
             contexto.beginPath();
             contexto.arc(0, moduloLunar.altura * -0.1, 5, 0, 2 * Math.PI);
             contexto.fillStyle = 'lightblue';
+            contexto.fill(); 
+            contexto.strokeStyle ="black";
+            contexto.lineWidth = 2;
+            contexto.stroke();
+            contexto.beginPath();
+            contexto.arc(-2, moduloLunar.altura * -0.15, 2, 0, 2 * Math.PI);
+            contexto.fillStyle = 'white';
             contexto.fill();
+           
          
     if(moduloLunar.motorligado){
         desenharChama();    
@@ -187,7 +258,11 @@ function desenharModuloLunar(){
     }
  
 function desenhar(){
-   
+contexto.clearRect(0,0, canvas.width, canvas.height);
+    if(estado === "menu"){
+        desenharMenu();
+    } else if (estado === "jogo"){
+    
     atracaoGravitacional();
     desenharEstrela();
     desenharModuloLunar();
@@ -200,6 +275,7 @@ function desenhar(){
     if(encerrarJogo()){
         return;
     }
+}
 
     requestAnimationFrame(desenhar);
  
@@ -226,6 +302,11 @@ function encerrarJogo(){
     }
     return false;
 }
+document.addEventListener("keydown", function(event){
+    if (event.key === "Enter" && estado === "menu"){
+        estado = "jogo";
+    }
+});
  
 document.addEventListener('keydown', teclaPressionada);
  
@@ -278,7 +359,7 @@ function atracaoGravitacional(){
     }
  
     if(moduloLunar.motorligado){
-        moduloLunar.velocidade.y -= 0.02 * Math.cos(moduloLunar.angulo)
+        moduloLunar.velocidade.y -= 0.05 * Math.cos(moduloLunar.angulo)
         moduloLunar.velocidade.x += 0.1 * Math.sin(moduloLunar.angulo)
         
     }
